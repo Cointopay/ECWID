@@ -50,8 +50,10 @@ if (isset($_POST["data"])) {
 
     if ($json_response === false) {
 
-      $this->last_curl_error = curl_error($ch);
-      $this->last_curl_errno = curl_errno($ch);
+      // $this->last_curl_error = curl_error($ch);
+      // $this->last_curl_errno = curl_errno($ch);
+      $last_curl_error = curl_error($ch);
+      $last_curl_errno = curl_errno($ch);
 
       curl_close($ch);
       return false;
@@ -65,7 +67,7 @@ if (isset($_POST["data"])) {
 
   // Get payload from the POST and decrypt it
   $ecwid_payload = $_POST['data'];
-  $client_secret = ""; // working client_secrate
+  $client_secret = ""; // PROVIDE ECWID client_secrate
 
   // The resulting JSON from payment request will be in $order variable
   $order = getEcwidPayload($client_secret, $ecwid_payload);
@@ -97,7 +99,7 @@ if (isset($_POST["data"])) {
   $results = makeTransactionRequest($perameters);
 
   // If the transaction request was a success then goto Cointopay.com to make payments
-  if($results){
+  if( isset($results['shortURL']) ){
     header("Location: ".$results['shortURL']);
     exit;
   }
@@ -111,10 +113,7 @@ if (isset($_POST["data"])) {
 
 // If we are returning back to storefront. Callback from payment
 
-if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
-
-  echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
-  echo "<h1>Notification:</h1>";
+else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
 
   $status = strtolower($_GET['status']);
   $halt = false;
@@ -128,19 +127,23 @@ if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
   }
 
   if(isset($_GET["notenough"]) && $_GET["notenough"]=="1"){
+    echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
+    echo "<h1>Notification:</h1>";
     echo "<h3>Payment has been received but it is not enough. Therefore the transaction is not completed. Please, contact site administrator for further details.</h3>";
     $status = "INCOMPLETE";
     $halt = true;
   }
 
-  if($status != "PAID" || $status != "CANCELLED" || $status != "INCOMPLETE"){
+  $valid_status = array( "PAID", "CANCELLED", "INCOMPLETE");
+
+  if( !in_array($status, $valid_status) ){
     echo "<h3>Transaction status is unknown. Therefore the transaction is canceled. Please, contact site administrator for further details.</h3>";
     $status = "CANCELLED";
     $halt = true;
   }
 
   // Set variables
-  $client_id = ""; // Working client_id
+  $client_id = ""; // PROVIDE ECWID client_id
   $token = base64_decode(($_GET['callbackPayload']));
   $storeId = $_GET['storeId'];
   $orderNumber = $_GET['orderNumber'];
