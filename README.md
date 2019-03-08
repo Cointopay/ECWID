@@ -4,7 +4,7 @@ The Modern Currency Payment Provider you can trust. Supporting Bitcoin (Cash), E
 
 ## Getting Started
 
-These instructions will help you in setting up Cointopay payment gateway for Ecwid store.
+These instructions will help you in setting up **Cointopay.com** payment gateway for Ecwid store.
 
 ### Prerequisites
 
@@ -12,7 +12,7 @@ In order to use this plug-in on Ecwid store, you need to have Cointopay’s acco
 
 ### Installing
 
-Please, follow the given steps to setup **Cointopay Payment Gateway** app in your Ecwid store: 
+Please, follow the given steps to setup **Cointopay.com** payment gateway app in your Ecwid store: 
 
 * Search and install *Cointopay.com* payment gateway app in your Ecwid store - [Installation Guide](https://support.ecwid.com/hc/en-us/articles/115005872689-Guide-to-using-Ecwid-App-Market)
 * Go to *Payment* section in the Ecwid control panel and enable the *Cointopay.com* app
