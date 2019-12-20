@@ -20,6 +20,7 @@ Please, follow the given steps to setup **Cointopay.com** payment gateway app in
 * You are all set to use the app
 
 **Note:** *Your provided values in the app will be saved automatically*
+*Lessons learned: make sure you have the specific CURL for your php FPM installed*
 
 ## Authors
 
