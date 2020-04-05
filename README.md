@@ -1,6 +1,6 @@
 # Cointopay Payment Gateway
 
-Sourcecode for plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
+Sourcecode for ECWID market app plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
 
 The Modern Currency Payment Provider you can trust. Supporting Bitcoin (Cash), Ethereum, Litecoin, Decred, Monero, Mooncoin and many more.
 
