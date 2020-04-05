@@ -1,5 +1,7 @@
 # Cointopay Payment Gateway
 
+Sourcecode for plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
+
 The Modern Currency Payment Provider you can trust. Supporting Bitcoin (Cash), Ethereum, Litecoin, Decred, Monero, Mooncoin and many more.
 
 ## Getting Started
@@ -21,8 +23,4 @@ Please, follow the given steps to setup **Cointopay.com** payment gateway app in
 
 **Note:** *Your provided values in the app will be saved automatically*
 *Lessons learned: make sure you have the specific CURL for your php FPM installed*
-
-## Authors
-
-* **Taimoor Ali Khan** - *Initial work* - [BoxBilling](https://github.com/Cointopay/BoxBilling)
 
