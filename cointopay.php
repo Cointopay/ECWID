@@ -78,7 +78,7 @@ if (isset($_POST["data"])) {
 
   // Encode access token and prepare calltack URL template
   $callbackPayload = base64_encode($order['token']);
-  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['orderNumber']."&callbackPayload=".$callbackPayload;
+  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['orderNumber']."&account_id=".$account_id."&callbackPayload=".$callbackPayload;
 
   // Perameters to make transaction request on Cointopay.com
   $perameters = array(
@@ -114,6 +114,83 @@ if (isset($_POST["data"])) {
 // If we are returning back to storefront. Callback from payment
 
 else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
+
+   //Validate response
+   function makeTransactionValidation($perameters) {
+	$url  = "https://app.cointopay.com/v2REAPI";
+    if (count($perameters) > 0) {
+        $url .= '?' . http_build_query($perameters);
+    }
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $json_response = curl_exec($ch);
+
+ 
+    if ($json_response === false) {
+
+      $this->last_curl_error = curl_error($ch);
+      $this->last_curl_errno = curl_errno($ch);
+
+      curl_close($ch);
+      return false;
+    }
+
+    $response = json_decode($json_response, true);
+    curl_close($ch);
+
+    return $response;
+  }
+  echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
+  echo "<h1>Notification:</h1>";
+   if (empty($_GET['account_id'])){
+			echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
+  echo "<h2>Error: CredentialsMissing</h2>";
+  echo "</div></center>";
+  exit;
+  } 
+  $resp_data = array(
+    "MerchantID"            => $_GET['account_id'],
+	"Call"             => "Transactiondetail",
+	"APIKey"   =>    "a",
+	"output"  => "json",
+	"ConfirmCode" =>        $_GET['ConfirmCode'],
+  );
+
+  // Make the transaction request
+  $transactionData = makeTransactionValidation($resp_data);
+  	if(200 !== $transactionData['status_code']){
+		echo "<h3>".$transactionData['message']."</h3>";exit;
+	}
+	else{
+		if($transactionData['data']['Security'] != $_GET['ConfirmCode']){
+			echo "<h3>Data mismatch! ConfirmCode doesn\'t match</h3>";exit;
+		}
+		elseif($transactionData['data']['CustomerReferenceNr'] != $_GET['CustomerReferenceNr']){
+			echo "<h3>Data mismatch! CustomerReferenceNr doesn\'t match</h3>";exit;
+		}
+		elseif($transactionData['data']['TransactionID'] != $_GET['TransactionID']){
+			echo "<h3>Data mismatch! TransactionID doesn\'t match</h3>";exit;
+		}
+		elseif(isset($_GET['AltCoinID']) && $transactionData['data']['AltCoinID'] != $_GET['AltCoinID']){
+			echo "<h3>Data mismatch! AltCoinID doesn\'t match</h3>";exit;
+		}
+		elseif(isset($_GET['MerchantID']) && $transactionData['data']['MerchantID'] != $_GET['MerchantID']){
+			echo "<h3>Data mismatch! MerchantID doesn\'t match</h3>";exit;
+		}
+		elseif(isset($_GET['CoinAddressUsed']) && $transactionData['data']['coinAddress'] != $_GET['CoinAddressUsed']){
+			echo "<h3>Data mismatch! coinAddress doesn\'t match</h3>";exit;
+		}
+		elseif(isset($_GET['SecurityCode']) && $transactionData['data']['SecurityCode'] != $_GET['SecurityCode']){
+			echo "<h3>Data mismatch! SecurityCode doesn\'t match</h3>";exit;
+		}
+		elseif(isset($_GET['inputCurrency']) && $transactionData['data']['inputCurrency'] != $_GET['inputCurrency']){
+			echo "<h3>Data mismatch! inputCurrency doesn\'t match</h3>";exit;
+		}
+		elseif($transactionData['data']['Status'] != $_GET['status']){
+			echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
+		}
+		
+	}
 
   $status = strtolower($_GET['status']);
   $halt = false;
