@@ -1,6 +1,6 @@
 # Cointopay Payment Gateway
 
-Sourcecod for ECWID market app plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
+Sourcecode for ECWID market app plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
 
 The Modern Currency Payment Provider you can trust. Supporting Bitcoin (Cash), Ethereum, Litecoin, Decred, Monero, Mooncoin and many more.
 
@@ -20,7 +20,7 @@ Please, follow the given steps to setup **Cointopay.com** payment gateway app in
 
 * Search and install *Cointopay.com* payment gateway app in your Ecwid store - [Installation Guide](https://support.ecwid.com/hc/en-us/articles/115005872689-Guide-to-using-Ecwid-App-Market)
 * Go to *Payment* section in the Ecwid control panel and enable the *Cointopay.com* app
-* Click on the app to edit and provide your *Cointopay.com* credentials
+* Click on the app to edit and provide your *Cointopay.com* credentials (MerchantID and Security Code - get it from Cointopay.com account section, Security Code changes when you change your password or email address on cointopay.com)
 * You are all set to use the app
 
 **Note:** *Your provided values in the app will be saved automatically*
