@@ -78,7 +78,7 @@ if (isset($_POST["data"])) {
 
   // Encode access token and prepare calltack URL template
   $callbackPayload = base64_encode($order['token']);
-  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['orderNumber']."&account_id=".$account_id."&callbackPayload=".$callbackPayload;
+  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['id']."&account_id=".$account_id."&callbackPayload=".$callbackPayload;
 
   // Perameters to make transaction request on Cointopay.com
   $perameters = array(
@@ -86,7 +86,7 @@ if (isset($_POST["data"])) {
     "MerchantID"            => $account_id,
     "Amount"                => $order["cart"]["order"]["total"],
     "AltCoinID"             => "1",
-    "CustomerReferenceNr"   => $order['cart']['order']['referenceTransactionId'],
+    "CustomerReferenceNr"   => $order['cart']['order']['id'],
     "SecurityCode"          => $secret_code,
     "output"                => "json",
     "inputCurrency"         => $order["cart"]["currency"],
@@ -211,7 +211,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
     $halt = true;
   }
 
-  $valid_status = array( "PAID", "CANCELLED", "INCOMPLETE");
+  $valid_status = array( "PAID", "CANCELLED", "INCOMPLETE", "FAILED");
 
   if( !in_array($status, $valid_status) ){
     echo "<h3>Transaction status is unknown. Therefore the transaction is canceled. Please, contact site administrator for further details.</h3>";
@@ -233,7 +233,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
   ));
 
   // URL used to update the order via Ecwid REST API
-  $url = "https://app.ecwid.com/api/v3/$storeId/orders/transaction_$orderNumber?token=$token";
+  $url = "https://app.ecwid.com/api/v3/$storeId/orders/$orderNumber?token=$token";
 
   // Send request to update order
   $ch = curl_init();
