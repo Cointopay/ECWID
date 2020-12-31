@@ -67,7 +67,7 @@ if (isset($_POST["data"])) {
 
   // Get payload from the POST and decrypt it
   $ecwid_payload = $_POST['data'];
-  $client_secret = ""; // PROVIDE ECWID client_secrate
+  $client_secret = "ECTBhNEeGoxYP4o7YGDK9rfTPhrRFFJw"; // PROVIDE ECWID client_secrate
 
   // The resulting JSON from payment request will be in $order variable
   $order = getEcwidPayload($client_secret, $ecwid_payload);
@@ -186,9 +186,15 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
 		elseif(isset($_GET['inputCurrency']) && $transactionData['data']['inputCurrency'] != $_GET['inputCurrency']){
 			echo "<h3>Data mismatch! inputCurrency doesn\'t match</h3>";exit;
 		}
-		elseif($transactionData['data']['Status'] != $_GET['status']){
+		elseif(isset($_GET["notenough"]) && $_GET["notenough"]=="1" && $transactionData['data']['Status'] != $_GET['status']){
+			//echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
+		}
+		elseif($transactionData['data']['Status'] != 'expired' && $transactionData['data']['Status'] != $_GET['status']){
 			echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
 		}
+		//elseif($transactionData['data']['Status'] != $_GET['status']){
+		//	echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
+		//}
 		
 	}
 
@@ -203,10 +209,14 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
     $status = "CANCELLED";
   }
 
+  if($status == "failed"){
+    $status = "FAILED";
+  }
+
   if(isset($_GET["notenough"]) && $_GET["notenough"]=="1"){
-    echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
-    echo "<h1>Notification:</h1>";
-    echo "<h3>Payment has been received but it is not enough. Therefore the transaction is not completed. Please, contact site administrator for further details.</h3>";
+    //echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
+    //echo "<h1>Notification:</h1>";
+    echo "<h3>Payment has been received but it is not enough. Please pay the remaining amount or contact the site administrator for further details.</h3>";
     $status = "INCOMPLETE";
     $halt = true;
   }
@@ -220,7 +230,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
   }
 
   // Set variables
-  $client_id = ""; // PROVIDE ECWID client_id
+  $client_id = "cointopay-com-trs"; // PROVIDE ECWID client_id
   $token = base64_decode(($_GET['callbackPayload']));
   $storeId = $_GET['storeId'];
   $orderNumber = $_GET['orderNumber'];
@@ -248,7 +258,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
   // return customer back to storefront
   if(!$halt) header("Location: ".$returnUrl);
 
-  echo "<a href='$returnurl'>Back</a>";
+  echo "<a href='https://cointopay.com/invoice/".$_GET['ConfirmCode']."'>Back</a>";
   echo "</div></center>";
   exit;
 
