@@ -1,4 +1,5 @@
 # PLEASE IGNORE BELOW IF YOU HAVE AN EXISTING ECWID STORE - WE ARE LOCATED IN ECWID UNDER PAYMENT IN THE ECWID.COM MENU
+Source code for ECWID market app plugin located here: https://www.ecwid.com/apps/paymentgateways/cointopay-com-trs
 
 # Cointopay Payment Gateway
 
