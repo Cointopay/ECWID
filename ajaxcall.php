@@ -2,7 +2,7 @@
 if (isset($_REQUEST["merchantId"])) {
    $merchant = $_REQUEST["merchantId"];
 
-    $url = 'https://cointopay.com/CloneMasterTransaction?MerchantID=' . $merchant . '&output=json&JsonArray=1';
+    $url = 'https://app.cointopay.com/CloneMasterTransaction?MerchantID=' . $merchant . '&output=json&JsonArray=1';
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_RETURNTRANSFER => 1,
