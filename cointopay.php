@@ -67,7 +67,7 @@ if (isset($_POST["data"])) {
 
   // Get payload from the POST and decrypt it
   $ecwid_payload = $_POST['data'];
-  $client_secret = "ECTBhNEeGoxYP4o7YGDK9rfTPhrRFFJw"; // PROVIDE ECWID client_secrate
+  $client_secret = ""; // PROVIDE ECWID client_secrate
 
   // The resulting JSON from payment request will be in $order variable
   $order = getEcwidPayload($client_secret, $ecwid_payload);
@@ -75,6 +75,7 @@ if (isset($_POST["data"])) {
   // Account info from merchant app settings in app interface in Ecwid CP
   $account_id = $order['merchantAppSettings']['merchantId'];
   $secret_code = $order['merchantAppSettings']['secretCode'];
+  $cryptoCurrency = $order['merchantAppSettings']['cryptoCurrency'];
 
   // Encode access token and prepare calltack URL template
   $callbackPayload = base64_encode($order['token']);
@@ -85,7 +86,7 @@ if (isset($_POST["data"])) {
     "Checkout"              => "true",
     "MerchantID"            => $account_id,
     "Amount"                => $order["cart"]["order"]["total"],
-    "AltCoinID"             => "1",
+    "AltCoinID"             => $cryptoCurrency,
     "CustomerReferenceNr"   => $order['cart']['order']['id'],
     "SecurityCode"          => $secret_code,
     "output"                => "json",
@@ -94,13 +95,13 @@ if (isset($_POST["data"])) {
     "transactionfailurl"    => $callbackUrl,
     "transactionconfirmurl" => $callbackUrl
   );
-
+  
   // Make the transaction request
   $results = makeTransactionRequest($perameters);
 
   // If the transaction request was a success then goto Cointopay.com to make payments
   if( isset($results['shortURL']) ){
-    header("Location: ".$results['shortURL']);
+   header("Location: ".$results['shortURL']);
     exit;
   }
 
@@ -230,7 +231,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
   }
 
   // Set variables
-  $client_id = "cointopay-com-trs"; // PROVIDE ECWID client_id
+  $client_id = ""; // PROVIDE ECWID client_id
   $token = base64_decode(($_GET['callbackPayload']));
   $storeId = $_GET['storeId'];
   $orderNumber = $_GET['orderNumber'];

@@ -1,7 +1,7 @@
 // Initialize the application
 
 	EcwidApp.init({
-	  app_id: "cointopay-com-trs", // working app_id
+	  app_id: "", // working app_id
 	  autoloadedflag: true, 
 	  autoheight: true
 	});
@@ -68,7 +68,7 @@ function readValuesFromPage(){
 					applicationConfig[fieldVisibility][allInputs[i].dataset.name] = allInputs[i].value;	
 				}
 			}
-			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){
+			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){ console.log(allInputs[i].value);
 				applicationConfig[fieldVisibility][allInputs[i].dataset.name] = allInputs[i].value;
 			}
 		}
@@ -122,9 +122,14 @@ function setValuesForPage(applicationConfig){
 					checkFieldChange(allInputs[i]);
 				}
 			}
-			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){
+			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){ 
 				allInputs[i].value = applicationConfig[fieldVisibility][allInputs[i].dataset.name];
-				checkFieldChange(allInputs[i]);
+				checkFieldChange(allInputs[i]); console.log(allInputs[i].id);
+				if(allInputs[i].id == 'crypto_currency' && applicationConfig[fieldVisibility][allInputs[i].dataset.name] != ''){
+				   if(document.getElementById("merchantId").value != ''){
+						getAltCoin(document.getElementById("merchantId").value, applicationConfig[fieldVisibility][allInputs[i].dataset.name]);
+					}
+				}
 			}
 		}
 	}	
@@ -173,6 +178,7 @@ function getUserData() {
 	// Retrieve all keys and values from application storage, including public app config. Set the values for select, input and textarea elements on a page in a callback
 
 	EcwidApp.getAppStorage(function(allValues){
+		
 		setValuesForPage(allValues);
 	});
 
@@ -198,13 +204,61 @@ function saveUserData() {
 // Main app function to determine if the user is new or just logs into the app
 
 EcwidApp.getAppStorage('installed', function(value){
-
+     
 	if (value != null) {
 		getUserData();
 	}
 	else {
 		createUserData();
 	}
-})
+});
+
+document.getElementById("merchantId").addEventListener("keyup", function() {
+  getCoin(this.value);
+});
+function getCoin(merchant_id) {
+
+  // var merchant_id = document.getElementById("merchantId").value;
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+		var str = "";
+		
+		data = JSON.parse(this.responseText);
+	  for (i=0; i < data.length; i++) {
+		    if (data[i].id != 0) {
+                        str += "<option value='" + data[i].id + "'> " + data[i].name + "</option>";
+             }
+		}
+      document.getElementById("crypto_currency").innerHTML = str;
+    }
+  };
+  xhttp.open("GET", "ajaxcall.php?merchantId="+merchant_id, true);
+  xhttp.send();
+}
+function getAltCoin(merchant_id, altcoin) {
+
+  // var merchant_id = document.getElementById("merchantId").value;
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+		var str = "";
+		
+		data = JSON.parse(this.responseText);
+	  for (i=0; i < data.length; i++) {
+		    if (data[i].id != 0) {
+                        str += "<option value='" + data[i].id + "'> " + data[i].name + "</option>";
+             }
+		}
+      document.getElementById("crypto_currency").innerHTML = str;
+	  if (altcoin != '' && altcoin != 0) {
+		document.getElementById("crypto_currency").value = altcoin;
+	  }
+    }
+  };
+  xhttp.open("GET", "ajaxcall.php?merchantId="+merchant_id, true);
+  xhttp.send();
+}
+
 
 
