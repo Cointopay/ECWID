@@ -33,4 +33,11 @@ div#appContent {
 .edit-product-label {
     display: none;
 }
-
+.field_crypto .field__label{
+	opacity: 1 !important;
+    -webkit-transform: translate3D(0, 0, 0) !important;
+    transform: translate3D(0, 0, 0) !important;
+}
+.field_crypto {
+	height: 50px !important;
+}
