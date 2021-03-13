@@ -68,7 +68,7 @@ function readValuesFromPage(){
 					applicationConfig[fieldVisibility][allInputs[i].dataset.name] = allInputs[i].value;	
 				}
 			}
-			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){ console.log(allInputs[i].value);
+			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){
 				applicationConfig[fieldVisibility][allInputs[i].dataset.name] = allInputs[i].value;
 			}
 		}
@@ -124,7 +124,7 @@ function setValuesForPage(applicationConfig){
 			}
 			if(allInputs[i].tagName == "SELECT" || allInputs[i].tagName == "TEXTAREA"){ 
 				allInputs[i].value = applicationConfig[fieldVisibility][allInputs[i].dataset.name];
-				checkFieldChange(allInputs[i]); console.log(allInputs[i].id);
+				checkFieldChange(allInputs[i]);
 				if(allInputs[i].id == 'crypto_currency' && applicationConfig[fieldVisibility][allInputs[i].dataset.name] != ''){
 				   if(document.getElementById("merchantId").value != ''){
 						getAltCoin(document.getElementById("merchantId").value, applicationConfig[fieldVisibility][allInputs[i].dataset.name]);
