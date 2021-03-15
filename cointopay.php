@@ -188,7 +188,7 @@ else if (isset($_GET["callbackPayload"]) && isset($_GET["status"])) {
 			echo "<h3>Data mismatch! inputCurrency doesn\'t match</h3>";exit;
 		}
 		elseif(isset($_GET["cancel"]) && $_GET["cancel"]=="1" && $transactionData['data']['Status'] != $_GET['status']){
-			//echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
+			$_GET['status'] = "cancel";
 		}
 		elseif(isset($_GET["notenough"]) && $_GET["notenough"]=="1" && $transactionData['data']['Status'] != $_GET['status']){
 			//echo "<h3>Data mismatch! status doesn\'t match. Your order status is ".$transactionData['data']['Status']."</h3>";exit;
