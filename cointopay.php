@@ -107,7 +107,9 @@ if (isset($_POST["data"])) {
 
   echo "<center><div style='width: 50%; padding: 8%; margin-top: 10px; background: #f9f9f9; border-radius: 10px;'>";
   echo "<h2>Error: Unable to process transaction. Please make sure the SecurityCode is copied correctly. Need help? Contact support@cointopay.com.</h2>";
+  if ( !empty($results) ) {
   echo "Message: <b>" . $results . "</b>";
+  }
   echo "</div></center>";
   exit;
 
