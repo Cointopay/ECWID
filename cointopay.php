@@ -79,7 +79,7 @@ if (isset($_POST["data"])) {
 
   // Encode access token and prepare calltack URL template
   $callbackPayload = base64_encode($order['token']);
-  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['id']."&account_id=".$account_id."&callbackPayload=".$callbackPayload;
+  $callbackUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?storeId=".$order['storeId']."&orderNumber=".$order['cart']['order']['orderNumber']."&account_id=".$account_id."&callbackPayload=".$callbackPayload;
 
   // Perameters to make transaction request on Cointopay.com
   $perameters = array(
@@ -87,7 +87,7 @@ if (isset($_POST["data"])) {
     "MerchantID"            => $account_id,
     "Amount"                => $order["cart"]["order"]["total"],
     "AltCoinID"             => $cryptoCurrency,
-    "CustomerReferenceNr"   => $order['cart']['order']['id'],
+    "CustomerReferenceNr"   => $order['cart']['order']['orderNumber'],
     "SecurityCode"          => $secret_code,
     "output"                => "json",
     "inputCurrency"         => $order["cart"]["currency"],
